@@ -16,7 +16,7 @@ jobs:
       uses: actions/setup-ruby@v1
       with:
         ruby-version: 2.6.x
-    -name: Set up graphviz
+    - name: Set up graphviz
       uses: kamiazya/setup-graphviz@v1
     - name: Build with Rake
       run: |
