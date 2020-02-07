@@ -20,7 +20,7 @@ jobs:
       run: |
         gem install bundler rake
         bundle install --jobs 4 --retry 3
-        bundle exec rake
+        rake
     - name: Crée une archive avec les fichiers HTML
       uses: actions/upload-artifact@v1
       with:
