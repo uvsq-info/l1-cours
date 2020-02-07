@@ -1,0 +1,28 @@
+name: Ruby
+
+on:
+  push:
+    branches:
+    - master
+ 
+jobs:
+  build:
+    name: Generate HTML files
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+    - name: Set up Ruby 2.6
+      uses: actions/setup-ruby@v1
+      with:
+        ruby-version: 2.6.x
+    - name: Build and test with Rake
+      run: |
+        gem install bundler
+        bundle install --jobs 4 --retry 3
+        bundle exec rake
+    - name: Crée une archive avec les fichiers HTML
+      uses: actions/upload-artifact@v1
+      with:
+        name: l1-cours
+        path: html/
