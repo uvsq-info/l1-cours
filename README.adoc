@@ -1,6 +1,8 @@
 = Cours de L1 informatique à l'UVSQ
 <l1.lic.info@sympa.uvsq.fr>
 
+https://github.com/uvsq-info/l1-cours/workflows/Build%20course/badge.svg[Build course]
+
 This project uses https://asciidoctor.org/[Asciidoctor] source files to generate various documents (https://revealjs.com/#/[Reveal.js] slides, HTML "book").
 
 == Structure of the project
