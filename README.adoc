@@ -1,8 +1,7 @@
-= A Course Template using AsciiDoctor
-Stéphane Lopes <stephane.lopes@uvsq.fr>
+= Cours de L1 informatique à l'UVSQ
+<l1.lic.info@sympa.uvsq.fr>
 
-This project is a template for computer science course materials.
-The template uses https://asciidoctor.org/[Asciidoctor] source files to generate various documents (https://revealjs.com/#/[Reveal.js] slides, HTML "book").
+This project uses https://asciidoctor.org/[Asciidoctor] source files to generate various documents (https://revealjs.com/#/[Reveal.js] slides, HTML "book").
 
 == Structure of the project
 The main file of the project is link:index.adoc[index.adoc].
@@ -14,6 +13,8 @@ An option for code examples is to use https://github.com/ingydotnet/git-subrepo[
 Metadata about the course (author and version) are in the file link:meta.adoc[meta.adoc]
 Configuration parameters specific to book output are in link:index.adoc[index.adoc].
 Parameters common to book and slide output are in link:attributes.adoc[attributes.adoc].
+
+When a chapter directory is added, deleted or if its name changes, the link:Rakefile[Rakefile] has to be updated.
 
 == Project building
 Building the project requires a https://www.ruby-lang.org/[Ruby] environment.
