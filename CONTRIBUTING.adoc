@@ -1,0 +1,238 @@
+= Comment contribuer à ce cours ?
+<stephane.lopes@uvsq.fr>
+
+Ce document détaille la marche à suivre pour ajouter du contenu à ce cours.
+Pour cela, il est nécessaire de disposer d'une installation de https://git-scm.com/[git] fonctionnelle.
+Il est préférable mais pas totalement indispensable de disposer également d'un installation locale de https://www.ruby-lang.org/[Ruby], https://bundler.io/[bundler], https://ruby.github.io/rake/[rake] et http://graphviz.org/[graphviz].
+
+== Récupérer une copie locale du dépôt
+La première fois, pour travailler sur ce projet, il faut le cloner.
+Par la suite, il suffit de mettre à jour la copie locale.
+
+.Clonage avec une authentification par HTTPS
+[source,bash,indent=0]
+----
+$ git clone https://github.com/uvsq-info/l1-cours.git
+----
+
+.Clonage avec une authentification par SSH
+[source,bash,indent=0]
+----
+$ git clone git@github.com:uvsq-info/l1-cours.git
+----
+
+.Mise à jour de la copie locale
+[source,bash,indent=0]
+----
+$ git pull
+----
+
+== Débuter sa contribution
+Lorsqu'on travaille avec git, il est recommandé de créer une branche pour chaque ajout important.
+
+.Création de la branche `chapter3`
+[source,bash,indent=0]
+----
+$ git checkout -b chapter3
+----
+
+== Ajouter un nouveau chapitre
+=== Créer la structure du chapitre
+Pour débuter un chapitre, il faut créer un sous-répertoire dans lequel on placera le fichier principal du chapitre.
+Pour ce dernier, il est plus simple de débuter en copiant le contenu du fichier principal d'un autre chapitre.
+
+.Ajout du chapitre `chapter3` avec une section
+[source,bash,indent=0]
+----
+$ mkdir chapter3
+$ cp chapter2/chapter2.adoc chapter3/chapter3.adoc
+$ touch chapter3/section1.adoc
+----
+
+=== Modifier le fichier d'index général
+Une référence au nouveau chapitre doit être ajoutée dans le fichier link:index.adoc[`index.adoc`] qui se trouve à la racine du projet.
+
+=== Modifier le fichier de build
+Le fichier de build `Rakefile` contient une référence vers chaque chapitre du cours.
+Il suffit pour cela de modifier, au début du fichier,  la ligne débutant par `chapters =` en ajoutant à l'intérieur de `%w[]` le nouveau chapitre.
+
+.Avant l'ajout
+----
+chapters = %w[chapter1 chapter2] # %w defines a string array
+----
+
+.Après l'ajout
+----
+chapters = %w[chapter1 chapter2 chapter3] # %w defines a string array
+----
+
+=== Construire le projet
+
+WARNING: un environnement https://www.ruby-lang.org/[Ruby] est nécessaire pour cette étape.
+
+Avant la première compilation, il est nécessaire d'installer les dépendances https://www.ruby-lang.org/[Ruby] du projet.
+Ceci n'est à faire qu'une seule fois.
+
+.Installation des dépendances du projet
+[source,bash,indent=0]
+----
+$ bundle install
+----
+
+Ensuite, il suffir d'invoquer `rake` pour générer les fichiers HTML du cours.
+
+.Construction du projet
+[source,bash,indent=0]
+----
+$ rake clean && rake
+mkdir -p html
+wget -qO- https://github.com/hakimel/reveal.js/archive/3.9.2.tar.gz | tar --transform 's/^reveal.js-3.9.2/reveal.js/' -xz -C html/
+sed -e 's/  font-size: ..px;/  font-size: 24px;/' html/reveal.js/css/theme/black.css > html/reveal.js/css/theme/blackmy.css
+mkdir -p html/figs
+cp html/figs
+cp chapter1/figs/tabref1.png html/figs
+cp html/figs
+cp html/figs
+asciidoctor -r asciidoctor-diagram -D html/ index.adoc
+asciidoctor-revealjs -r asciidoctor-diagram -D html/ chapter1/chapter1.adoc
+asciidoctor-revealjs -r asciidoctor-diagram -D html/ chapter2/chapter2.adoc
+asciidoctor-revealjs -r asciidoctor-diagram -D html/ chapter3/chapter3.adoc
+----
+
+Le résultat peut être consulté dans le fichier `html/index.html` pour le cours complet et dans `html/chapter3.html` pour les slides.
+
+=== Valider les changements
+La commande `git status` permet de visualiser les changements avant la validation.
+
+.Visualiser les changements
+[source,bash,indent=0]
+----
+$ git status
+Sur la branche chapter3
+Modifications qui ne seront pas validées :
+  (utilisez "git add <fichier>..." pour mettre à jour ce qui sera validé)
+  (utilisez "git restore <fichier>..." pour annuler les modifications dans le répertoire de travail)
+	modifié :         Rakefile
+	modifié :         index.adoc
+
+Fichiers non suivis:
+  (utilisez "git add <fichier>..." pour inclure dans ce qui sera validé)
+	chapter3/
+
+aucune modification n'a été ajoutée à la validation (utilisez "git add" ou "git commit -a")
+----
+
+Il faut ensuite explicitement ajouter les fichiers à valider.
+
+.Indexation des fichiers avant validation
+[source,bash,indent=0]
+----
+$ git add Rakefile chapter3 index.adoc
+----
+
+Il est souhaitable de vérifier à nouveau l'état des fichiers avec `git status`.
+
+Il est ensuite possible de valider les changements en indiquant un message permettant d'identifier le contenu du commit.
+
+.Création d'un nouveau commit
+[source,bash,indent=0]
+----
+$ git commit -m"Débute le chapitre 3"
+[chapter3 0ece3f4] Débute le chapitre 3
+ Date: Mon Mar 2 12:37:21 2020 +0100
+ 4 files changed, 13 insertions(+), 1 deletion(-)
+ create mode 100644 chapter3/chapter3.adoc
+ create mode 100644 chapter3/section1.adoc
+----
+
+== Modifier un chapitre
+Pour cela, il suffit d'éditer ou d'ajouter les fichiers adéquats, de construire le projet avec `rake`, puis de valider les changements avec `git add` et `git commit` comme illustré dans la section précédente.
+
+.Modification d'un chapitre
+[source,bash,indent=0]
+----
+$ rake clean && rake
+$ git status
+$ git add chapter3/section1.adoc
+$ git status
+$ git commit -m"Ajoute des slides sur blablabla dans le chapitre 3"
+----
+
+== Sauvegarder la branche sur github
+À cet instant, toutes les modifications effectuées existent uniquement localement.
+Il est préférable de les sauvegarder régulièrement sur le dépôt central.
+
+.Sauvegarde de la branche
+[source,bash,indent=0]
+----
+$ git push origin chapter3
+Énumération des objets: 14, fait.
+Décompte des objets: 100% (14/14), fait.
+Compression par delta en utilisant jusqu'à 24 fils d'exécution
+Compression des objets: 100% (10/10), fait.
+Écriture des objets: 100% (11/11), 1.36 Kio | 696.00 Kio/s, fait.
+Total 11 (delta 4), réutilisés 0 (delta 0)
+remote: Resolving deltas: 100% (4/4), completed with 3 local objects.
+remote: 
+remote: Create a pull request for 'chapter3' on GitHub by visiting:
+remote:      https://github.com/uvsq-info/l1-cours/pull/new/chapter3
+remote: 
+To github.com:uvsq-info/l1-cours.git
+ * [new branch]      chapter3 -> chapter3
+----
+
+NOTE: `origin` est un alias vers le dépôt central automatiquement créé lors du clonage intial.
+
+WARNING: Ceci ne modifie pas la branche principale du dépôt et donc n'est pas automatiquement construit sur github.
+
+== Intégrer sa contribution
+L'étape finale consiste à intégrer les changements effectués dans la branche `chapter3` dans la branche `master`.
+
+Il faut tout d'abord rappatrier localement les éventuelles modifications de la branche `master`.
+
+.Rappatrier les modifications distantes
+[source,bash,indent=0]
+----
+$ git pull origin master
+Depuis github.com:uvsq-info/l1-cours
+ * branch            master     -> FETCH_HEAD
+Déjà à jour.
+----
+
+Ceci fait, il reste à fusionner la branche `chapter3` avec `master`.
+Pour cela, on se place sur master puis on fusionne.
+
+.Fusionner `chapter3` avec `master`
+[source,bash,indent=0]
+----
+$ git checkout master
+Basculement sur la branche 'master'
+Votre branche est à jour avec 'origin/master'.
+$ git merge chapter3
+Mise à jour d242767..09cbfc4
+Fast-forward
+ Rakefile               |  2 +-
+ chapter3/chapter3.adoc | 11 +++++++++++
+ chapter3/section1.adoc | 30 ++++++++++++++++++++++++++++++
+ index.adoc             |  1 +
+ 4 files changed, 43 insertions(+), 1 deletion(-)
+ create mode 100644 chapter3/chapter3.adoc
+ create mode 100644 chapter3/section1.adoc
+----
+
+WARNING: Cette étape peut générer des conflits avec les fichiers se trouvant déjà sur `master`.
+
+Pour terminer, on envoie la mise à jour de `master` sur github.
+
+.Publier les mises à jour sur github
+[source,bash,indent=0]
+----
+$git push origin master
+Total 0 (delta 0), réutilisés 0 (delta 0)
+To github.com:uvsq-info/l1-cours.git
+   d242767..09cbfc4  master -> master
+----
+
+WARNING: Ceci déclenche automatiquement la construction du cours sur github.
+Le résultat est visible en consultant la couleur du badge image:https://github.com/uvsq-info/l1-cours/workflows/Build%20course/badge.svg[Build course] au début du fichier link:README.adoc[README.adoc].
+L'archive générée est disponible sur la https://github.com/uvsq-info/l1-cours/actions?query=workflow%3A%22Build+course%22[page] des actions github.
