@@ -1,0 +1,11 @@
+= Le chapitre 3
+ifndef::masterdoc[]
+include::../meta.adoc[]
+include::../attributes.adoc[]
+endif::masterdoc[]
+
+:leveloffset: +1
+
+include::section1.adoc[]
+
+:leveloffset: -1

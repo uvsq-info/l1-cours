@@ -13,5 +13,6 @@ include::attributes.adoc[]
 
 include::chapter1/chapter1.adoc[]
 include::chapter2/chapter2.adoc[]
+include::chapter3/chapter3.adoc[]
 
 :leveloffset: -1
