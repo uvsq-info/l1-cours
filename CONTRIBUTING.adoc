@@ -1,5 +1,6 @@
 = Comment contribuer à ce cours ?
 <stephane.lopes@uvsq.fr>
+:icons: font
 
 Ce document détaille la marche à suivre pour ajouter du contenu à ce cours.
 Pour cela, il est nécessaire de disposer d'une installation de https://git-scm.com/[git] fonctionnelle.
