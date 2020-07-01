@@ -2,7 +2,7 @@ require 'rake/clean'
 # rake/clean defines CLEAN (Rake::FileList) for temporary files
 # and CLOBBER (Rake::FileList) for output files
 
-chapters = %w[chapter1 chapter2 chapter3] # %w defines a string array
+chapters = %w[chapter1 chapter2 chapter3 chapter4] # %w defines a string array
 
 REVEALJS_VERION = "3.9.2"
 
